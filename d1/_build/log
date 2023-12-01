@@ -1,0 +1,5 @@
+# dune init exec main
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Workspace root: /home/dm/projects/aoc2023/d1
+# Auto-detected concurrency: 12
