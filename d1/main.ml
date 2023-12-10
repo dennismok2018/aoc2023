@@ -1,4 +1,4 @@
-module C = struct
+module JaneStreet = struct
   include Core
 end
 (* let consume_input_text_line_by_line ~filepath ~consume =
@@ -138,10 +138,9 @@ type t =
   | Maybe_numeric of char list
   | Numeric of int
 
+let patterns = [ "one"; "two"; "three"; "four"; "five"; "six"; "seven"; "eight"; "nine" ]
+
 let extract clst =
-  let patterns =
-    [ "one"; "two"; "three"; "four"; "five"; "six"; "seven"; "eight"; "nine" ]
-  in
   let rec aux remaining tmp acc =
     match remaining with
     | hd :: tl ->
@@ -150,7 +149,7 @@ let extract clst =
       let found =
         List.fold_left
           (fun acc p ->
-            if C.String.is_substring ~substring:p nstr
+            if JaneStreet.String.is_substring ~substring:p nstr
             then (
               let i =
                 match p with
@@ -171,7 +170,7 @@ let extract clst =
           patterns
       in
       if List.length found = 0 then aux tl ntmp acc else aux tl [ hd ] found @ acc
-    | [] -> List.rev acc
+    | [] -> acc
   in
   aux clst [] []
 ;;
@@ -184,7 +183,7 @@ let if_numeric c =
   | Failure _ -> false
 ;;
 
-let wrapper_lst_hd lst =
+let wrapped_lst_hd lst =
   try
     List.hd lst |> ignore;
     Some (List.hd lst)
@@ -200,7 +199,7 @@ let extract_numerics_from_line line =
         if if_numeric c
         then Numeric (int_of_char c - 48) :: acc
         else (
-          match wrapper_lst_hd acc with
+          match wrapped_lst_hd acc with
           | Some (Numeric _) -> Maybe_numeric [ c ] :: acc
           | Some (Maybe_numeric l) -> Maybe_numeric (l @ [ c ]) :: List.tl acc
           | None -> Maybe_numeric [ c ] :: acc))
@@ -211,7 +210,7 @@ let extract_numerics_from_line line =
     (fun acc t ->
       match t with
       | Numeric i -> i :: acc
-      | Maybe_numeric l -> List.rev (extract l) @ acc)
+      | Maybe_numeric l -> extract l @ acc)
     []
   @@ tlst
 ;;
