@@ -316,7 +316,7 @@ let load_input filepath =
     let max_of_each =
       List.fold_left (fun acc i -> replace_if_larger acc i) [] extracted_params
     in
-    print_string @@ "\nmins of " ^ string_of_int i ^ ": ";
+    print_string @@ "\nmaxes of " ^ string_of_int i ^ ": ";
     List.iter
       (fun t ->
         match t with
